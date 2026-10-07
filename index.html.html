@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🥠 Random Numbers Fortune Cookie 🥠</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;text-align:center;color:#f5f5a0;padding:10px;min-height:100vh;background:radial-gradient(circle at 50% 0%,#22221a,#0d0d0d 55%,#000 100%)}
+.wrap{max-width:520px;margin:0 auto}
+.disc{background:rgba(255,255,0,.05);border:1px dashed #8f8f2e;border-radius:12px;padding:6px;margin:6px auto;font-size:.6em;color:#b3b345}
+.ad{background:rgba(255,255,0,.04);border:1px solid #3d3d20;border-radius:12px;margin:8px auto;min-height:55px;display:flex;align-items:center;justify-content:center;font-size:.7em;color:#8f8f2e}
+h1{color:#ff3;margin:6px 0;font-size:1.3em}
+.sub{color:#d6d64a;font-weight:600;font-size:.85em}
+#cookie{font-size:3.4em;cursor:pointer;margin:8px;display:inline-block;animation:br 3s ease-in-out infinite}
+@keyframes br{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+#jackpot{display:none;background:linear-gradient(90deg,#caca00,#ff3,#caca00);color:#1a1a00;font-weight:bold;padding:6px 14px;border-radius:30px;margin:6px auto;font-size:.8em;max-width:320px}
+button{cursor:pointer;border:none;border-radius:30px;padding:10px 16px;font-size:.85em;font-weight:bold;background:linear-gradient(135deg,#ffff4d,#e6e600);color:#1a1a00;margin:4px;display:none}
+select{background:#22221a;color:#ff3;border:1px solid #d6d64a;border-radius:12px;padding:8px 14px;font-size:1em;font-weight:bold;margin:4px;cursor:pointer}
+.pickerBox{border:1px solid #5c5c22;border-radius:14px;padding:10px;margin:8px auto;max-width:340px;background:rgba(255,255,0,.03)}
+#luckBox{display:none;border:1px solid #d6d64a;border-radius:30px;padding:8px;margin:8px auto;max-width:280px;font-weight:bold;color:#ff3}
+#luckBox.hot{background:linear-gradient(90deg,#caca00,#ff3,#caca00);color:#1a1a00;box-shadow:0 0 15px #ff3}
+#fortune{display:none;border:1px solid #d6d64a;border-radius:16px;padding:12px 8px;margin:10px auto}
+#fortune.hot{border:2px solid #ff3;box-shadow:0 0 12px rgba(255,255,51,.5)}
+#fortuneText{font-style:italic;margin-bottom:10px;font-size:.9em;color:#fafac2}
+.box{background:rgba(255,255,0,.05);border:1px solid #5c5c22;border-radius:14px;padding:8px;margin:8px auto;max-width:420px;word-break:break-all}
+.box.hot{background:rgba(255,255,0,.12);border:2px solid #ff3}
+.bt{color:#ff3;font-weight:bold;font-size:.8em;margin-bottom:4px}
+.num{display:inline-block;background:linear-gradient(180deg,#ffff80,#e6e600);color:#1a1a00;font-weight:bold;width:24px;height:30px;line-height:30px;margin:1px;border-radius:8px;text-align:center}
+.num.hot{background:linear-gradient(180deg,#ff3,#caca00);font-weight:bold;box-shadow:0 0 6px #ff3;transform:scale(1.1)}
+.li{border:1px solid #3d3d20;border-radius:12px;padding:6px;margin:6px auto;max-width:320px;font-size:.8em}
+.li b{color:#ff3;display:block}
+#history{display:none;border:1px solid #5c5c22;border-radius:16px;padding:10px;margin:10px auto;max-width:420px}
+.ht{color:#ff3;font-weight:bold;font-size:.85em;margin-bottom:6px}
+.hentry{display:flex;align-items:center;gap:8px;border:1px solid #3d3d20;border-radius:12px;padding:5px 8px;margin:5px auto;font-size:.75em}
+.hentry.hot{border:2px solid #ff3;font-weight:bold;background:rgba(255,255,0,.1);box-shadow:0 0 8px rgba(255,255,51,.4)}
+.hbar{flex:1;height:8px;background:#2a2a15;border-radius:6px;overflow:hidden}
+.hfill{height:100%;background:#e6e600}
+.hentry.hot .hfill{background:#ff3}
+.hpct{color:#ff3;font-weight:bold;min-width:38px}
+.htime{color:#8f8f2e;min-width:52px;text-align:left}
+#clearHist{display:none;background:rgba(255,255,0,.1);color:#d6d64a;border:1px solid #5c5c22;font-size:.7em;padding:6px 12px}
+footer{font-size:.62em;margin-top:10px;color:#8f8f2e}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="disc"><b>⚠️ DISCLAIMER:</b> For entertainment only. Numbers are random. 18+.</div>
+<div class="ad" id="adTop">📢 Ad Space</div>
+<h1>🥠 Random Numbers Fortune Cookie 🥠</h1>
+<div id="cookie">🥠</div>
+<p class="sub">👆 Tap anywhere on the page!</p>
+<div id="jackpot">⚡ MEGA HUAT LUCKY SURPRISE ⚡</div>
+<div class="pickerBox">
+<p class="sub">🎲 Number length: 1 to 100 digits</p>
+<select id="digPick"></select>
+<p class="sub" style="margin-top:6px">🔢 How many numbers? (1–100)</p>
+<select id="setPick"></select>
+</div>
+<button id="again">🥠 Crack Again</button>
+<div id="luckBox">🍀 Lucky Percentage: <span id="luckVal">0%</span></div>
+<div id="fortune">
+<p id="fortuneText"></p>
+<div id="sets"></div>
+<div class="li"><b>🧧 Zodiac</b><span id="vZ"></span></div>
+<div class="li"><b>🎨 Lucky Color</b><span id="vC"></span></div>
+<div class="li"><b>⏰ Lucky Time</b><span id="vT"></span></div>
+<div class="li"><b>🧭 Lucky Fengshui</b><span id="vD"></span></div>
+</div>
+<div id="history"><div class="ht">📜 Crack History</div><div id="histList"></div><button id="clearHist">🗑️ Clear History</button></div>
+<div class="ad" id="adBottom">📢 Ad Space</div>
+<footer>⚠️ For entertainment only. Play responsibly.</footer>
+</div>
+<script>
+var AD_TOP='',AD_BOTTOM='';
+if(AD_TOP.trim()){var e=document.getElementById('adTop');e.innerHTML=AD_TOP;e.style.minHeight='0'}
+if(AD_BOTTOM.trim()){var e2=document.getElementById('adBottom');e2.innerHTML=AD_BOTTOM;e2.style.minHeight='0'}
+
+var F=["HUAT AH!!! Big prosperity is charging toward you! 🦁","ONG for you ah! Your luck meter is overflowing!","Money COME and STAY ah! 💰","Your hongbao this year will be HEAVY!","Good fortune season coming soon!","You huat, family huat, everybody huat! 🧧","The God of Fortune just flagged your name! ✅","Lucky star shining on these numbers! ⭐","Reward incoming! 🙏","HUAT so much friends ask YOU for tips! 😆"];
+var Z=['🐀 Rat','🐂 Ox','🐅 Tiger','🐇 Rabbit','🐉 Dragon','🐍 Snake','🐎 Horse','🐐 Goat','🐒 Monkey','🐓 Rooster','🐕 Dog','🐖 Pig'];
+var C=['Gold ✨','Red 🧧','Royal Yellow 👑','Jade Green 💚','Lucky Orange 🧡','Pearl White 🤍'];
+var T=['7:11am','11:11am','1:18pm','3:33pm','6:16pm','8:08pm','9:09am'];
+var D=['East 🌅','Southeast 🌿','North 🧭','South ☀️','West 🌇','Northeast ⛰️'];
+var hist=[],setCount=1,digCount=4;
+
+(function(){
+var s=document.getElementById('digPick');
+for(var i=1;i<=100;i++){
+var o=document.createElement('option');
+o.value=i;o.textContent=i+(i===1?' digit':' digits');
+if(i===4)o.selected=true;
+s.appendChild(o);
+}
+s.addEventListener('click',function(ev){ev.stopPropagation()});
+s.addEventListener('change',function(ev){ev.stopPropagation();digCount=parseInt(this.value)});
+})();
+(function(){
+var s=document.getElementById('setPick');
+for(var i=1;i<=100;i++){
+var o=document.createElement('option');
+o.value=i;o.textContent=i===1?'1 number':i+' numbers';
+if(i===1)o.selected=true;
+s.appendChild(o);
+}
+s.addEventListener('click',function(ev){ev.stopPropagation()});
+s.addEventListener('change',function(ev){ev.stopPropagation();setCount=parseInt(this.value)});
+})();
+
+function pick(a){return a[Math.floor(Math.random()*a.length)]}
+function draw(n){var s='';for(var i=0;i<n;i++)s+=Math.floor(Math.random()*10);return s}
+function nums(s,hot){var h='';for(var i=0;i<s.length;i++)h+='<span class="num'+(hot?' hot':'')+'">'+s[i]+'</span>';return h}
+function multiLine(d,c,hot){var h='<div class="box'+(hot?' hot':'')+'"><div class="bt">🍀 '+d+'-Digit Numbers — '+c+' Number'+(c>1?'s':'')+(hot?' 🔥 HOT!':'')+'</div>';for(var i=1;i<=c;i++)h+='#'+i+' '+nums(draw(d),hot)+'<br>';return h+'</div>'}
+function timeStr(){var d=new Date(),h=d.getHours(),m=d.getMinutes();m=(m<10?'0':'')+m;var ap=h>=12?'pm':'am';h=h%12||12;return h+':'+m+ap}
+function renderHist(){
+var el=document.getElementById('histList'),h='';
+for(var i=0;i<hist.length;i++){var e=hist[i];var hot=e.pct>=90;
+h+='<div class="hentry'+(hot?' hot':'')+'"><span class="htime">'+e.time+'</span><span>'+(hot?'🔥':(e.jp?'🎉':'🥠'))+'</span><div class="hbar"><div class="hfill" style="width:'+e.pct+'%"></div></div><span class="hpct">'+e.pct+'%</span></div>'}
+el.innerHTML=h;
+document.getElementById('history').style.display=hist.length?'block':'none';
+document.getElementById('clearHist').style.display=hist.length?'inline-block':'none';
+}
+function crack(){
+var jp=Math.random()<0.15;
+var luck=jp?(85+Math.floor(Math.random()*16)):(30+Math.floor(Math.random()*61));
+var hot=luck>=90;
+document.getElementById('jackpot').style.display=jp?'block':'none';
+document.getElementById('fortuneText').innerHTML=jp?'🎉 SUPER LUCKY! '+pick(F)+' 🎉':pick(F);
+document.getElementById('sets').innerHTML=multiLine(digCount,setCount,hot);
+document.getElementById('vZ').textContent=pick(Z);
+document.getElementById('vC').textContent=pick(C);
+document.getElementById('vT').textContent=pick(T);
+document.getElementById('vD').textContent=pick(D);
+var lb=document.getElementById('luckBox');
+document.getElementById('luckVal').textContent=luck+'%'+(hot?' 🔥':'');
+lb.className=hot?'hot':'';
+lb.style.display='block';
+var ft=document.getElementById('fortune');
+ft.className=hot?'hot':'';
+ft.style.display='block';
+document.getElementById('again').style.display='inline-block';
+hist.unshift({pct:luck,time:timeStr(),jp:jp});
+if(hist.length>20)hist.pop();
+renderHist();
+}
+document.body.addEventListener('click',function(ev){
+if(ev.target.closest('button')||ev.target.closest('select'))return;
+crack();
+});
+document.getElementById('again').onclick=crack;
+document.getElementById('clearHist').onclick=function(){hist=[];renderHist()};
+</script>
+</body>
+</html>
